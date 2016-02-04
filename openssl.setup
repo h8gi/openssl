@@ -1,0 +1,22 @@
+(if (eq? (software-type) 'windows)
+    (begin
+      (compile
+       -O2 -d0 -s -j openssl "openssl.scm" -lssl -lcrypto -lgdi32)
+      (compile -O2 -d0 -s openssl.import.scm)
+      (compile
+       -O2 -d0 -c "openssl.scm" -lssl -lcrypto -lgdi32
+       -o openssl-static.o -unit openssl -D static))
+    (begin
+      (compile
+       -O2 -d0 -s -j openssl "openssl.scm" -lssl -lcrypto -I/usr/local/include)
+      (compile -O2 -d0 -s openssl.import.scm -I/usr/local/include)
+      (compile
+       -O2 -d0 -c "openssl.scm" -lssl -lcrypto
+       -o openssl-static.o -unit openssl -D static -I/usr/local/include)))
+
+(install-extension
+  'openssl
+  '("openssl.scm" "openssl.so" "openssl.import.so" "openssl-static.o")
+  '((version "1.7.0") 
+    (static "openssl-static.o")
+    (static-options "-lssl -lcrypto -lgdi32")))
