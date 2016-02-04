@@ -10,7 +10,7 @@
    ssl-close
    ssl-port?
    ssl-port->tcp-port
-   tcp-port->ssl-port
+   tcp-ports->ssl-ports
    ssl-listener?
    ssl-listener?
    ssl-listener-port
@@ -336,7 +336,7 @@ EOF
         (make-property-condition
          'type)))))
 
-(define (tcp-port->ssl-port tcp-in tcp-out #!optional (ctx 'sslv2-or-v3))
+(define (tcp-ports->ssl-ports tcp-in tcp-out #!optional (ctx 'sslv2-or-v3))
   (let* ((fd (net-unwrap-tcp-ports tcp-in tcp-out))
          (ctx
           (if (ssl-client-context? ctx)
